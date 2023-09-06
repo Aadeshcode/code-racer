@@ -289,7 +289,16 @@ export default function RacePractice({ user, snippet }: RacePracticeProps) {
           // spanElement?.current?.getBoundingClientRect().width
         );
         setWindowEnd(totalCharactersInput + scrollUpperLimit + 1);
-        setWindowStart(totalCharactersInput + scrollUpperLimit + 1 - 67);
+        setWindowStart(
+          totalCharactersInput +
+            scrollUpperLimit +
+            1 -
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            Math.floor(
+              (preElement.current?.getBoundingClientRect().width as any) /
+                spanElementWidth
+            )
+        );
       } else {
         handleScrollNegative(updatedInput);
       }
@@ -393,20 +402,18 @@ export default function RacePractice({ user, snippet }: RacePracticeProps) {
       setScrollPosition((prev) => prev + spanElementWidth);
     }
   }
-  //function to handle scroll to the left when backspaced
+
   function handleScrollNegative(updatedInput: string) {
     const lineNumber = input.split("\n").length;
     const totalCharactersInput = Number(
       updatedInput.split("\n")[lineNumber - 1]?.length
     );
-
     if (totalCharactersInput - windowStart <= scrollLowerLimit) {
       setWindowStart((previousValue) => previousValue - 1);
       setWindowEnd((previousValue) => previousValue - 1);
       setScrollPosition((prev) => prev - spanElementWidth);
     }
   }
-
   return (
     <div
       className="relative flex flex-col w-[clamp(10rem,95%,50rem)] gap-2 p-4 mx-auto rounded-md lg:p-8 bg-accent"
